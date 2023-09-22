@@ -18,7 +18,7 @@ services:
       resources:
         limits:
           cpus: '0.4'
-          memory: '0.5GB'
+          memory: '0.3GB'
     networks:
       - appnet
 
@@ -40,7 +40,7 @@ services:
       resources:
         limits:
           cpus: '0.4'
-          memory: '0.5GB'
+          memory: '0.3GB'
     networks:
       - appnet
 
@@ -75,7 +75,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.45'
+          cpus: '0.5'
           memory: '1GB'
     networks:
       - appnet
