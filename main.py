@@ -72,7 +72,6 @@ async def create(pessoa: PessoaSchema):
         raise HTTPException(status_code=400, detail=str(ex))
 
 
-@cache(expire=60)
 @app.get("/pessoas/{id}", status_code=200)
 async def find_by_id(id: str):
     global pool
@@ -86,7 +85,6 @@ async def find_by_id(id: str):
     return r
 
 
-@cache(expire=60)
 @app.get("/pessoas")
 async def find_by_term(t: str = Query(..., min_length=1)):
     global pool
