@@ -2,35 +2,34 @@ version: '3.5'
 services:
   fastapi1:
     build: .
-    command: ["gunicorn", "main:app", "--workers", "1", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--timeout", "1000"]
-    expose:
-      - 8000
+    ports:
+      - 8000:8000
     environment:
       - user_db=postgres
       - database_db=postgres
-      - host_db=localhost
+      - host_db=postgres
       - password_db=changeme
       - port_db=5432
       - redis_url=redis://redis:6379/0
     depends_on:
       - postgres
-    restart: on-failure          
+    restart: on-failure      
     deploy:
       resources:
         limits:
           cpus: '0.3'
           memory: '0.5GB'
-    network_mode: "host"
+    networks:
+      - appnet
 
   fastapi2:
     build: .
-    command: ["gunicorn", "main:app", "--workers", "1", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8001", "--timeout", "1000"]
-    expose: 
-      - 8001   
+    ports:
+      - 8001:8000    
     environment:
       - user_db=postgres
       - database_db=postgres
-      - host_db=localhost
+      - host_db=postgres
       - password_db=changeme
       - port_db=5432
       - redis_url=redis://redis:6379/0
@@ -42,7 +41,8 @@ services:
         limits:
           cpus: '0.3'
           memory: '0.5GB'
-    network_mode: "host"
+    networks:
+      - appnet
 
   nginx:
     image: nginx:latest
@@ -59,35 +59,41 @@ services:
         limits:
           cpus: '0.15'
           memory: '0.5GB'
-    network_mode: "host"
+    networks:
+      - appnet
 
   postgres:
     image: postgres
-    container_name: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       PGDATA: /data/postgres
     volumes:
-      - ./sql.sql:/docker-entrypoint-initdb.d/sql.sql
-    expose:
-      - 5432
+          - ./sql.sql:/docker-entrypoint-initdb.d/sql.sql        
+    ports:
+      - "5432:5432"
     restart: unless-stopped
     deploy:
       resources:
         limits:
           cpus: '0.75'
           memory: '1GB'
-    network_mode: "host"
+    networks:
+      - appnet
 
   # redis:
   #   image: redis:latest
   #   ports:
   #     - "6379:6379"
-  #   network_mode: "host"
+  #   networks:
+  #     - appnet
   #   command: redis-server --save "" --appendonly no --maxclients 10000
   #   deploy:
   #     resources:
   #       limits:
   #         cpus: '0.1'
   #         memory: '0.5GB'
+
+networks:
+  appnet:
+    driver: bridge

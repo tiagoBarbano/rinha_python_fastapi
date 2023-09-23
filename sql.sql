@@ -1,8 +1,8 @@
 CREATE EXTENSION pg_trgm;
 
 CREATE TABLE IF NOT EXISTS pessoa (
-    id uuid,
-    apelido VARCHAR(32) CONSTRAINT APELIDO_PK PRIMARY KEY,
+    id uuid NOT NULL CONSTRAINT PK_PESSOAS PRIMARY KEY,
+    apelido VARCHAR(32),
     nome VARCHAR(100),
     nascimento DATE,
     stack VARCHAR(1024),

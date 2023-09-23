@@ -12,7 +12,6 @@ from config import get_settings
 
 settings = get_settings()
 
-
 async def startup_pg():
     global pool
     pool = await asyncpg.create_pool(
@@ -21,7 +20,8 @@ async def startup_pg():
         password=settings.password_db,
         user=settings.user_db,
         port=settings.port_db,
-        # max_size=100,
+        max_size=150,
+        timeout=60
         # max_queries=50000,
     )
     print("Conexao realizada", pool)
