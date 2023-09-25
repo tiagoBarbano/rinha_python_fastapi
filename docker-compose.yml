@@ -10,15 +10,15 @@ services:
       - password_db=10203040
       - port_db=5432
       - database_url=postgresql://user:10203040@localhost:5432/rinha
-      - num_con_pg=150
+      - num_con_pg=200
     depends_on:
       - postgres
     restart: on-failure          
-    deploy:
-      resources:
-        limits:
-          cpus: '0.9'
-          memory: '0.75GB'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.9'
+    #       memory: '0.75GB'
     network_mode: "host"
 
   fastapi2:
@@ -31,15 +31,15 @@ services:
       - password_db=10203040
       - port_db=5432
       - database_url=postgresql://user:10203040@localhost:5432/rinha
-      - num_con_pg=150
+      - num_con_pg=200
     depends_on:
       - postgres
     restart: on-failure
-    deploy:
-      resources:
-        limits:
-          cpus: '0.9'
-          memory: '0.75GB'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.9'
+    #       memory: '0.75GB'
     network_mode: "host"
 
   nginx:
@@ -51,11 +51,11 @@ services:
       - fastapi2
     restart: on-failure
     network_mode: "host"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: '0.5GB'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.2'
+    #       memory: '0.5GB'
 
   postgres:
     image: postgres:latest

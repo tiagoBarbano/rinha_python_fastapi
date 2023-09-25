@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import asyncpg
 from fastapi import Depends, FastAPI, Query, Request
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 from pydantic import BaseModel, constr
@@ -13,7 +14,7 @@ settings = get_settings()
 
 
 app = FastAPI(title="Rinha de Back-end 2023")
-
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 async def create_db_pool():
     return await asyncpg.create_pool(
@@ -29,7 +30,7 @@ async def create_db_pool():
 
 # Função para obter uma conexão do pool
 async def get_db():
-    async with app.state.db_pool.acquire(timeout=90) as connection:
+    async with app.state.db_pool.acquire() as connection:
         yield connection
 
 
