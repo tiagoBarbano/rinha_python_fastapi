@@ -9,14 +9,16 @@ services:
       - host_db=localhost
       - password_db=10203040
       - port_db=5432
+      - database_url=postgresql://user:10203040@localhost:5432/rinha
+      - num_con_pg=150
     depends_on:
       - postgres
     restart: on-failure          
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: '0.4GB'
+          cpus: '0.9'
+          memory: '0.75GB'
     network_mode: "host"
 
   fastapi2:
@@ -28,14 +30,16 @@ services:
       - host_db=localhost
       - password_db=10203040
       - port_db=5432
+      - database_url=postgresql://user:10203040@localhost:5432/rinha
+      - num_con_pg=150
     depends_on:
       - postgres
     restart: on-failure
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: '0.4GB'
+          cpus: '0.9'
+          memory: '0.75GB'
     network_mode: "host"
 
   nginx:
@@ -51,7 +55,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: '0.2GB'
+          memory: '0.5GB'
 
   postgres:
     image: postgres:latest
@@ -61,24 +65,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_DB: rinha
     volumes:
-      - ./sql.sql:/docker-entrypoint-initdb.d/sql.sql
+      - ./sql1.sql:/docker-entrypoint-initdb.d/sql1.sql
       - ./postgres.conf:/etc/postgresql/postgresql.conf
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     network_mode: host
-    deploy:
-      resources:
-        limits:
-          cpus: "0.8"
-          memory: "2.5GB"
-
-  # redis:
-  #   image: redis:latest
-  #   ports:
-  #     - "6379:6379"
-  #   network_mode: "host"
-  #   command: redis-server --save "" --appendonly no --maxclients 10000
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.1'
-  #         memory: '0.5GB'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "3"
+    #       memory: "5GB"

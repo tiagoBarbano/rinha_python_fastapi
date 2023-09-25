@@ -14,11 +14,11 @@ services:
     depends_on:
       - postgres
     restart: on-failure      
-    deploy:
-      resources:
-        limits:
-          cpus: '0.3'
-          memory: '0.5GB'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.3'
+    #       memory: '0.5GB'
     networks:
       - appnet
 

@@ -1,12 +1,12 @@
 CREATE EXTENSION pg_trgm;
 
 CREATE TABLE IF NOT EXISTS pessoa (
-    id TEXT NOT NULL,
-    apelido VARCHAR(32) CONSTRAINT APELIDO_PK PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    nascimento DATE NOT NULL,
+    id TEXT NOT NULL CONSTRAINT PK_PESSOAS PRIMARY KEY,
+    apelido VARCHAR(32),
+    nome VARCHAR(100),
+    nascimento DATE,
     stack VARCHAR(1024),
-    busca TEXT NOT NULL
+    busca TEXT
 );
 
 CREATE  INDEX id_1695417482267_index ON "pessoa" USING btree ("id");
