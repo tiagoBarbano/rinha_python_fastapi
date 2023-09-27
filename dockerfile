@@ -3,7 +3,8 @@ FROM python:3.11.5-slim-bullseye
 RUN mkdir src
 
 COPY requirements.txt src
-COPY . src
+COPY app src/app
+COPY main.py src
 
 WORKDIR src
 RUN pip install --no-cache-dir --upgrade -r requirements.txt

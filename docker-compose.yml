@@ -10,15 +10,15 @@ services:
       - password_db=10203040
       - port_db=5432
       - database_url=postgresql://user:10203040@localhost:5432/rinha
-      - num_con_pg=200
+      - num_con_pg=150
     depends_on:
       - postgres
     restart: on-failure          
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.9'
-    #       memory: '0.75GB'
+    #       cpus: '0.325'
+    #       memory: '0.5GB'
     network_mode: "host"
 
   fastapi2:
@@ -31,21 +31,21 @@ services:
       - password_db=10203040
       - port_db=5432
       - database_url=postgresql://user:10203040@localhost:5432/rinha
-      - num_con_pg=200
+      - num_con_pg=150
     depends_on:
       - postgres
     restart: on-failure
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.9'
-    #       memory: '0.75GB'
+    #       cpus: '0.325'
+    #       memory: '0.5GB'
     network_mode: "host"
 
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./scripts/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - fastapi1
       - fastapi2
@@ -54,7 +54,7 @@ services:
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.2'
+    #       cpus: '0.1'
     #       memory: '0.5GB'
 
   postgres:
@@ -65,12 +65,12 @@ services:
       POSTGRES_USER: user
       POSTGRES_DB: rinha
     volumes:
-      - ./sql1.sql:/docker-entrypoint-initdb.d/sql1.sql
-      - ./postgres.conf:/etc/postgresql/postgresql.conf
+      - ./scripts/sql1.sql:/docker-entrypoint-initdb.d/sql1.sql
+      - ./scripts/postgres.conf:/etc/postgresql/postgresql.conf
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     network_mode: host
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: "3"
-    #       memory: "5GB"
+    #       cpus: "0.75"
+    #       memory: "2.5GB"
